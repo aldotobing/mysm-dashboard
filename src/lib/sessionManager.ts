@@ -35,7 +35,7 @@ export interface SessionData {
 const sessionStore: Map<string, SessionData> = new Map();
 
 // Session expiration time in seconds (e.g., 24 hours)
-const SESSION_EXPIRY_SECONDS = 24 * 60 * 60;
+// const SESSION_EXPIRY_SECONDS = 24 * 60 * 60;
 
 /**
  * Creates a new user session and stores it in memory.

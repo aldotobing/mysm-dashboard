@@ -8,7 +8,6 @@ import {
   getDashboardData, 
   getDashboardDataWithFilter,
   getOmzetData,
-  getOmzetDataWithFilter,
   getOmzetPerMonthData
 } from "@/services/dashboardService";
 import { useAuth } from "@/context/AuthContext";
