@@ -34,7 +34,7 @@ interface ChartTooltipContext {
   dataPointIndex: number;
 }
 
-export default function DashboardDetailPage({ params }: { params: { regionId: string } }) {
+export default function DashboardDetailPage({ params }: { params: Promise<{ regionId: string }> }) {
   const { user } = useAuth();
   useAuthRedirect();
 

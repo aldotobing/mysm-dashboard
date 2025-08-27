@@ -1,6 +1,4 @@
 // services/authService.ts
-import { setCookie } from '@/helpers/cookies';
-
 // Replace with your actual API URL
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mysidomuncul.sidomuncul.co.id';
 
@@ -43,7 +41,7 @@ export const loginUser = async (credentials: LoginCredentials): Promise<LoginRes
     let jsonResponse: LoginResponse | null = null;
     try {
       jsonResponse = JSON.parse(textResponse);
-    } catch (parseError) {
+    } catch {
       // If parsing fails, we'll handle it below
     }
 
