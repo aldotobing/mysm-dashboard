@@ -6,6 +6,33 @@ import { setCookie, getCookie, removeCookie } from "@/helpers/cookies";
 import { loginUser } from "@/services/authService";
 import hashPassword from "@/helpers/sha1";
 
+// Define UserLoginData interface to match the session data structure
+export interface UserLoginData {
+  user_id: string;
+  token: string;
+  email: string;
+  expired_date?: string;
+  refresh_token?: string;
+  refresh_expired_date?: string;
+  latest_action?: string;
+  otp?: string;
+  role_list?: string;
+  role_group_id?: string;
+  customer_id?: string;
+  customer_name?: string;
+  customer_code?: string | null;
+  customer_phone?: string;
+  price_list_id?: string | null;
+  price_list_version_id?: string | null;
+  customer_type_id?: string | null;
+  customer_level_name?: string | null;
+  customer_address?: string | null;
+  salesman_id?: string | null;
+  salesman_name?: string | null;
+  salesman_code?: string | null;
+  logincode?: string | null;
+}
+
 interface User {
   user_id: string;
   token: string;

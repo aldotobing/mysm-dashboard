@@ -96,6 +96,9 @@ importers:
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.9.2)
+      '@types/js-sha1':
+        specifier: ^0.6.3
+        version: 0.6.3
       '@types/node':
         specifier: ^20
         version: 20.19.11
@@ -1240,6 +1243,9 @@ packages:
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
+
+  '@types/js-sha1@0.6.3':
+    resolution: {integrity: sha512-un1DeTNTuRITbTjsycXohkeU5KNeTOmZQ2FyZIDDBxVwplg7Jhx26q4d3GoZ1MjJB7SZmafQzZLe2yRqlWUkpA==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -4160,6 +4166,8 @@ snapshots:
     optional: true
 
   '@types/estree@1.0.8': {}
+
+  '@types/js-sha1@0.6.3': {}
 
   '@types/json-schema@7.0.15': {}
 
