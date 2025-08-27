@@ -1,6 +1,5 @@
 // services/dashboardDetailService.ts
 import { apiClient } from './apiClient';
-import { getCookie } from '@/helpers/cookies';
 
 interface DashboardDetailData {
   region_id_detail: string;
@@ -20,10 +19,17 @@ interface DashboardDetailData {
   total_complete_customer: string;
 }
 
+interface DashboardDetailParams {
+  region_id: string;
+  start_date?: string;
+  end_date?: string;
+  [key: string]: string | undefined;
+}
+
 export const getDashboardDetailData = async (regionId: string, startDate?: string, endDate?: string): Promise<DashboardDetailData[]> => {
   try {
     // Use the correct endpoint for dashboard detail data
-    const params: Record<string, string> = {
+    const params: DashboardDetailParams = {
       region_id: regionId,
     };
     

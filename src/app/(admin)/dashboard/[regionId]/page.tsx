@@ -5,7 +5,6 @@ import { useAuth } from "@/context/AuthContext";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 import { useEffect, useState, use } from "react";
 import { getDashboardDetailData } from "@/services/dashboardDetailService";
-import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
@@ -30,9 +29,13 @@ interface DashboardDetailData {
   total_complete_customer: string;
 }
 
+interface ChartTooltipContext {
+  seriesIndex: number;
+  dataPointIndex: number;
+}
+
 export default function DashboardDetailPage({ params }: { params: { regionId: string } }) {
   const { user } = useAuth();
-  const router = useRouter();
   useAuthRedirect();
 
   // Unwrap params with React.use() for Next.js 14+ compliance
@@ -44,8 +47,8 @@ export default function DashboardDetailPage({ params }: { params: { regionId: st
   const [regionName, setRegionName] = useState<string>("");
   
   // Chart states
-  const [chartData, setChartData] = useState<any[]>([]);
-  const [chartOptions, setChartOptions] = useState<any>({});
+  const [chartData, setChartData] = useState<ApexAxisChartSeries>([]);
+  const [chartOptions, setChartOptions] = useState<ApexCharts.ApexOptions>({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,7 +88,7 @@ export default function DashboardDetailPage({ params }: { params: { regionId: st
       const totalInvoice = dashboardDetailData.map(item => parseInt(item.total_invoice_user_detail) || 0);
       const totalKelengkapan = dashboardDetailData.map(item => parseInt(item.total_complete_customer) || 0);
 
-      const chartSeries = [
+      const chartSeries: ApexAxisChartSeries = [
         {
           name: 'Total Toko',
           data: totalToko,
@@ -126,9 +129,9 @@ export default function DashboardDetailPage({ params }: { params: { regionId: st
 
       setChartData(chartSeries);
 
-      const options = {
+      const options: ApexCharts.ApexOptions = {
         chart: {
-          type: 'bar' as const,
+          type: 'bar',
           stacked: true,
         },
         xaxis: {
@@ -143,22 +146,22 @@ export default function DashboardDetailPage({ params }: { params: { regionId: st
         },
         tooltip: {
           y: {
-            formatter: function (val: number, { seriesIndex, dataPointIndex }: any) {
-              if (dashboardDetailData.length > dataPointIndex) {
-                if (seriesIndex === 0) {
-                  const totalTokoAll = parseInt(dashboardDetailData[dataPointIndex].total_outlet) || 1;
+            formatter: function (val: number, context: ChartTooltipContext) {
+              if (dashboardDetailData.length > context.dataPointIndex) {
+                if (context.seriesIndex === 0) {
+                  const totalTokoAll = parseInt(dashboardDetailData[context.dataPointIndex].total_outlet) || 1;
                   const percentage = (val / totalTokoAll) * 100;
                   return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' (' + percentage.toFixed(2) + '%)';
-                } else if (seriesIndex === 1) {
-                  const totalTokoAll = parseInt(dashboardDetailData[dataPointIndex].total_outlet) || 1;
+                } else if (context.seriesIndex === 1) {
+                  const totalTokoAll = parseInt(dashboardDetailData[context.dataPointIndex].total_outlet) || 1;
                   const percentage = (val / totalTokoAll) * 100;
                   return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' (' + percentage.toFixed(2) + '%)';
-                } else if (seriesIndex === 2) {
-                  const totalTokoAll = parseInt(dashboardDetailData[dataPointIndex].total_outlet) || 1;
+                } else if (context.seriesIndex === 2) {
+                  const totalTokoAll = parseInt(dashboardDetailData[context.dataPointIndex].total_outlet) || 1;
                   const percentage = (val / totalTokoAll) * 100;
                   return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' (' + percentage.toFixed(2) + '%)';
-                } else if (seriesIndex === 3) {
-                  const totalTokoAll = parseInt(dashboardDetailData[dataPointIndex].total_outlet) || 1;
+                } else if (context.seriesIndex === 3) {
+                  const totalTokoAll = parseInt(dashboardDetailData[context.dataPointIndex].total_outlet) || 1;
                   const percentage = (val / totalTokoAll) * 100;
                   return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' (' + percentage.toFixed(2) + '%)';
                 } else {
@@ -189,7 +192,7 @@ export default function DashboardDetailPage({ params }: { params: { regionId: st
           enabled: false,
         },
         legend: {
-          position: 'bottom' as const,
+          position: 'bottom',
         },
         fill: {
           opacity: 1,

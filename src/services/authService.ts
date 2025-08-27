@@ -40,7 +40,7 @@ export const loginUser = async (credentials: LoginCredentials): Promise<LoginRes
     const textResponse = await response.text();
     
     // Try to parse as JSON
-    let jsonResponse;
+    let jsonResponse: LoginResponse | null = null;
     try {
       jsonResponse = JSON.parse(textResponse);
     } catch (parseError) {

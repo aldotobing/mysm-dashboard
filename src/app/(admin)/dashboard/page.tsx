@@ -22,7 +22,7 @@ export default function DashboardPage() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Welcome back, {user?.email || "User"}! Here's what's happening today.
+          Welcome back, {user?.email || "User"}! Here&apos;s what&apos;s happening today.
         </p>
       </div>
 

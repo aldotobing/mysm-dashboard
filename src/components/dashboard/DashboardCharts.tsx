@@ -46,6 +46,11 @@ interface OmzetPerMonthData {
   total_omzet: string;
 }
 
+interface ChartTooltipContext {
+  seriesIndex: number;
+  dataPointIndex: number;
+}
+
 const DashboardCharts = () => {
   const { user } = useAuth();
   const [dashboardData, setDashboardData] = useState<DashboardData[]>([]);
@@ -61,12 +66,12 @@ const DashboardCharts = () => {
   const [endDate, setEndDate] = useState<string | null>(null);
 
   // Chart states
-  const [chartData, setChartData] = useState<any[]>([]);
-  const [chartOptions, setChartOptions] = useState<any>({});
-  const [chartOmzet, setChartOmzet] = useState<any[]>([]);
-  const [omzetOptions, setOmzetOptions] = useState<any>({});
-  const [chartVolume, setChartVolume] = useState<any[]>([]);
-  const [volumeOptions, setVolumeOptions] = useState<any>({});
+  const [chartData, setChartData] = useState<ApexAxisChartSeries>([]);
+  const [chartOptions, setChartOptions] = useState<ApexCharts.ApexOptions>({});
+  const [chartOmzet, setChartOmzet] = useState<ApexAxisChartSeries>([]);
+  const [omzetOptions, setOmzetOptions] = useState<ApexCharts.ApexOptions>({});
+  const [chartVolume, setChartVolume] = useState<ApexNonAxisChartSeries | ApexAxisChartSeries>([]);
+  const [volumeOptions, setVolumeOptions] = useState<ApexCharts.ApexOptions>({});
 
   // Fetch dashboard data
   useEffect(() => {
@@ -144,7 +149,7 @@ const DashboardCharts = () => {
       const totalInvoice = dashboardData.map(item => parseInt(item.total_invoice_user) || 0);
       const totalKelengkapan = dashboardData.map(item => parseInt(item.total_complete_customer) || 0);
 
-      const chartSeries = [
+      const chartSeries: ApexAxisChartSeries = [
         {
           name: 'Total Toko',
           data: totalToko,
@@ -185,9 +190,9 @@ const DashboardCharts = () => {
 
       setChartData(chartSeries);
 
-      const options = {
+      const options: ApexCharts.ApexOptions = {
         chart: {
-          type: 'bar' as const,
+          type: 'bar',
         },
         xaxis: {
           categories: dashboardData.map(item => item.region_name),
@@ -201,21 +206,21 @@ const DashboardCharts = () => {
         },
         tooltip: {
           y: {
-            formatter: function (val: number, { seriesIndex, dataPointIndex }: any) {
-              if (seriesIndex === 0) {
-                const totalTokoAll = parseInt(dashboardData[dataPointIndex].total_outlet) || 1;
+            formatter: function (val: number, context: ChartTooltipContext) {
+              if (context.seriesIndex === 0) {
+                const totalTokoAll = parseInt(dashboardData[context.dataPointIndex].total_outlet) || 1;
                 const percentage = (val / totalTokoAll) * 100;
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' (' + percentage.toFixed(2) + '%)';
-              } else if (seriesIndex === 1) {
-                const totalTokoAll = parseInt(dashboardData[dataPointIndex].total_outlet) || 1;
+              } else if (context.seriesIndex === 1) {
+                const totalTokoAll = parseInt(dashboardData[context.dataPointIndex].total_outlet) || 1;
                 const percentage = (val / totalTokoAll) * 100;
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' (' + percentage.toFixed(2) + '%)';
-              } else if (seriesIndex === 2) {
-                const totalTokoAll = parseInt(dashboardData[dataPointIndex].total_outlet) || 1;
+              } else if (context.seriesIndex === 2) {
+                const totalTokoAll = parseInt(dashboardData[context.dataPointIndex].total_outlet) || 1;
                 const percentage = (val / totalTokoAll) * 100;
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' (' + percentage.toFixed(2) + '%)';
-              } else if (seriesIndex === 3) {
-                const totalTokoAll = parseInt(dashboardData[dataPointIndex].total_outlet) || 1;
+              } else if (context.seriesIndex === 3) {
+                const totalTokoAll = parseInt(dashboardData[context.dataPointIndex].total_outlet) || 1;
                 const percentage = (val / totalTokoAll) * 100;
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' (' + percentage.toFixed(2) + '%)';
               } else {
@@ -244,7 +249,7 @@ const DashboardCharts = () => {
           enabled: false,
         },
         legend: {
-          position: 'bottom' as const,
+          position: 'bottom',
         },
         fill: {
           opacity: 1,
@@ -267,19 +272,19 @@ const DashboardCharts = () => {
       );
 
       // Value chart
-      const chartOmzetSeries = [
+      const chartOmzetSeries: ApexAxisChartSeries = [
         {
           name: 'Total Value',
-          type: 'column' as const,
+          type: 'column',
           data: totalValue,
         },
       ];
 
       setChartOmzet(chartOmzetSeries);
 
-      const optionsOmzet = {
+      const optionsOmzet: ApexCharts.ApexOptions = {
         chart: {
-          type: 'bar' as const,
+          type: 'bar',
         },
         xaxis: {
           categories: omzetData.map(item => item.region_group_name),
@@ -307,7 +312,7 @@ const DashboardCharts = () => {
           text: 'Value',
         },
         legend: {
-          position: 'bottom' as const,
+          position: 'bottom',
         },
         fill: {
           opacity: 1,
@@ -327,19 +332,19 @@ const DashboardCharts = () => {
       setOmzetOptions(optionsOmzet);
 
       // Volume chart
-      const chartVolumeSeries = [
+      const chartVolumeSeries: ApexAxisChartSeries = [
         {
           name: 'Total Volume',
-          type: 'line' as const,
+          type: 'line',
           data: totalVolume,
         },
       ];
 
       setChartVolume(chartVolumeSeries);
 
-      const optionsVolume = {
+      const optionsVolume: ApexCharts.ApexOptions = {
         chart: {
-          type: 'line' as const,
+          type: 'line',
         },
         xaxis: {
           categories: omzetData.map(item => item.region_group_name),
@@ -368,7 +373,7 @@ const DashboardCharts = () => {
           text: ' Volume ',
         },
         legend: {
-          position: 'bottom' as const,
+          position: 'bottom',
         },
         fill: {
           opacity: 1,

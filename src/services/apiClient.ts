@@ -4,8 +4,12 @@ import { getCookie } from '@/helpers/cookies';
 // Use the proxy endpoint for API requests
 const API_URL = '/api';
 
+interface ApiClientParams {
+  [key: string]: string | number | boolean | undefined;
+}
+
 export const apiClient = {
-  get: async (endpoint: string, params?: Record<string, any>) => {
+  get: async (endpoint: string, params?: ApiClientParams) => {
     try {
       const token = getCookie('token');
       
@@ -15,7 +19,7 @@ export const apiClient = {
         const searchParams = new URLSearchParams();
         Object.keys(params).forEach(key => {
           if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
-            searchParams.append(key, params[key]);
+            searchParams.append(key, String(params[key]));
           }
         });
         if (searchParams.toString()) {
@@ -50,7 +54,7 @@ export const apiClient = {
     }
   },
   
-  post: async (endpoint: string, body: any) => {
+  post: async (endpoint: string, body: unknown) => {
     try {
       const token = getCookie('token');
       
